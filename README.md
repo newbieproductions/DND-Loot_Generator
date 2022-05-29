@@ -58,6 +58,7 @@ TO DO:
 - make a cantrip - 9th level spell lists.
 
 Updates:
+- 5/29/22 -> Setup Github Repository and learned how to commit and push code from android studio. 
 - 5/27/22 -> Added a challenge rating dropdown menu to select the CR, consolidated individual and hoard loot buttons (multiple buttons aren't needed since CR is not in the dropdown menu). Added a # of Monsters text field for user input. 
 - 5/26/22 -> added art object and gems lists. deleted menues file (forgot to do this when i started using compose for the ui). Cleaned up magic item list A. 
 - 5/24/22 -> Made local versions of the desktop app for windows and mac. Learned a bit about intelliJ compiling and differences in mac vs windows compiling.

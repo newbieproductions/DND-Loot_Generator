@@ -52,12 +52,12 @@ Resources used:
 TO DO:
 
 - Make rolls tables for magic item specific tables (include charges with magic items)
-- make a function to copy the results so the user can paste them
 - make function to export results to google sheets & excel.
 - take "hoard while loops" that add the magic item names and descriptions and make it a general function.
 - make a cantrip - 9th level spell lists.
 
 Updates:
+- 5/30/22 -> Made the magic results selectable so that the user can copy and paste the results. 
 - 5/29/22 -> Setup Github Repository and learned how to commit and push code from android studio. 
 - 5/27/22 -> Added a challenge rating dropdown menu to select the CR, consolidated individual and hoard loot buttons (multiple buttons aren't needed since CR is not in the dropdown menu). Added a # of Monsters text field for user input. 
 - 5/26/22 -> added art object and gems lists. deleted menues file (forgot to do this when i started using compose for the ui). Cleaned up magic item list A. 

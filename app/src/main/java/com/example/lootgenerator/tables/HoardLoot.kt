@@ -1,8 +1,7 @@
 package com.example.lootgenerator.tables
 
-import com.example.dndlootgenerator.data.*
-import com.example.dndlootgenerator.functions.diceRoll
 import com.example.lootgenerator.data.*
+import com.example.lootgenerator.functions.diceRoll
 
 val magicName = mutableListOf<String>()
 val magicDescription = mutableListOf<String>()

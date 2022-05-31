@@ -1,6 +1,6 @@
 package com.example.lootgenerator.data
 
-import com.example.dndlootgenerator.model.MagicItem
+import com.example.lootgenerator.model.MagicItem
 
 fun rollListIName(magicRoll: Int): String {
     var result = when (magicRoll) {

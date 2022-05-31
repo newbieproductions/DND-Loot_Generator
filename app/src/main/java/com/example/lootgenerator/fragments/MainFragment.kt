@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -19,17 +20,15 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
-import com.example.dndlootgenerator.tables.hoardTable
-import com.example.dndlootgenerator.tables.individualTable
-import com.example.dndlootgenerator.tables.magicDescription
-import com.example.dndlootgenerator.tables.magicName
 import com.example.lootgenerator.data.*
+import com.example.lootgenerator.tables.hoardTable
+import com.example.lootgenerator.tables.individualTable
+import com.example.lootgenerator.tables.magicDescription
+import com.example.lootgenerator.tables.magicName
 
-@Preview
 @Composable
 fun LootResults() {
 
@@ -55,7 +54,7 @@ fun LootResults() {
     var expanded by remember { mutableStateOf(false) }
     var textFieldSize by remember { mutableStateOf(Size.Zero)}
     val icon = if (expanded) {Icons.Filled.KeyboardArrowUp} else {Icons.Filled.KeyboardArrowDown}
-    val chalRatings = listOf<String>("CR 0-4", "CR 5-10", "CR 11-16", "CR 17+")
+    val chalRatings = listOf("CR 0-4", "CR 5-10", "CR 11-16", "CR 17+")
     var numOfMonsters by remember { mutableStateOf("1") }
     var selectedText by remember { mutableStateOf("") }
 
@@ -73,7 +72,9 @@ fun LootResults() {
                 onValueChange = {selectedText = it},
                 modifier = Modifier
                     .fillMaxWidth()
-                    .onGloballyPositioned { coordinates -> textFieldSize = coordinates.size.toSize() },
+                    .onGloballyPositioned { coordinates ->
+                        textFieldSize = coordinates.size.toSize()
+                    },
                 label = { Text("Challenge Rating") },
                 trailingIcon = { Icon(icon, "Challenge Rating",
                 modifier = Modifier.clickable { expanded = !expanded }) }
@@ -99,22 +100,25 @@ fun LootResults() {
                 }
             }
         }
-
+        /**
+         * Outlined texfield for # of monsters
+         */
         Row {
-
             OutlinedTextField(
                 value = numOfMonsters,
                 onValueChange = {numOfMonsters = it},
                 modifier = Modifier
                     .fillMaxWidth()
-                    .onGloballyPositioned { coordinates -> textFieldSize = coordinates.size.toSize() }
+                    .onGloballyPositioned { coordinates ->
+                        textFieldSize = coordinates.size.toSize()
+                    }
                     .padding(top = 10.dp),
                 label = { Text("# of Monsters") }
             )
         }
 
         /**
-         * Loot Buttons
+         * Individual & Hoard Loot Buttons
          */
         Row(
             Modifier.fillMaxWidth(),
@@ -136,7 +140,10 @@ fun LootResults() {
                     resetCurrency()
                 },
                 shape = MaterialTheme.shapes.medium,
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black)
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
             ) {
                 Text(text = "Individual Loot", color = Color.White)
             }
@@ -171,216 +178,226 @@ fun LootResults() {
                 },
                 shape = MaterialTheme.shapes.medium,
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black),
-                modifier = Modifier.padding(start = 10.dp)
+                modifier = Modifier
+                    .padding(start = 10.dp)
+                    .fillMaxWidth()
+                    .weight(1f)
             ) {
                 Text(text = "Hoard Loot", color = Color.White)
             }
         }
 
         /**
-         * Currency, Gems, & Art Cards
-         */
-        Row(horizontalArrangement = Arrangement.SpaceEvenly) {
-            /**
-             * Currency
-             */
-            Box(
-                modifier = Modifier.weight(1f)
-                    .padding(all = 10.dp)
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(Color.LightGray)
-                    .height(height = 156.dp)
-            ) {
-                Column(verticalArrangement = Arrangement.SpaceEvenly) {
-                    /**
-                     * Currency Header
-                     */
-                    Text(
-                        text = "Currency:", color = Color.White,
-                        modifier = Modifier.background(Color.Black)
-                            .fillMaxWidth()
-                            .padding(start = 10.dp)
-                            .padding(top = 5.dp)
-                            .padding(bottom = 5.dp)
-                            .weight(1f)
-                    )
-                    /**
-                     * Currency Content
-                     */
-                    Text(
-                        text = "CP: $copperResult", modifier = Modifier.padding(start = 10.dp)
-                            .padding(top = 2.dp).padding(bottom = 2.dp).weight(1f)
-                    )
-                    Text(
-                        text = "SP: $silverResult", modifier = Modifier.padding(start = 10.dp)
-                            .padding(top = 2.dp).padding(bottom = 2.dp).weight(1f)
-                    )
-                    Text(
-                        text = "EP: $electrumResult", modifier = Modifier.padding(start = 10.dp)
-                            .padding(top = 2.dp).padding(bottom = 2.dp).weight(1f)
-                    )
-                    Text(
-                        text = "GP: $goldResult", modifier = Modifier.padding(start = 10.dp)
-                            .padding(top = 2.dp).padding(bottom = 2.dp).weight(1f)
-                    )
-                    Text(
-                        text = "PP: $platinumResult", modifier = Modifier.padding(start = 10.dp)
-                            .padding(top = 2.dp).padding(bottom = 5.dp).weight(1f)
-                    )
-                }
-            }
-
-            /**
-             * Gems
-             */
-            Box(
-                modifier = Modifier.weight(1f)
-                    .padding(top = 10.dp)
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(Color.LightGray)
-            ) {
-                Column {
-                    /**
-                     * Gems Header
-                     */
-                    Text(
-                        text = "Gems:", color = Color.White,
-                        modifier = Modifier.background(Color.Black)
-                            .fillMaxWidth()
-                            .padding(start = 10.dp)
-                            .padding(top = 5.dp)
-                            .padding(bottom = 5.dp)
-                    )
-                    /**
-                     * Gems Content
-                     */
-                    Text(
-                        text = "10 GP: $tenGemsResult", modifier = Modifier.padding(start = 10.dp)
-                            .padding(top = 2.dp).padding(bottom = 2.dp)
-                    )
-                    Text(
-                        text = "50 GP: $fiftyGemsResult", modifier = Modifier.padding(start = 10.dp)
-                            .padding(top = 2.dp).padding(bottom = 2.dp)
-                    )
-                    Text(
-                        text = "100 GP: $oneHundredGemsResult", modifier = Modifier.padding(start = 10.dp)
-                            .padding(top = 2.dp).padding(bottom = 2.dp)
-                    )
-                    Text(
-                        text = "500 GP: $fiveHundredGemsResult", modifier = Modifier.padding(start = 10.dp)
-                            .padding(top = 2.dp).padding(bottom = 2.dp)
-                    )
-                    Text(
-                        text = "1000 GP: $thousandGemsResult", modifier = Modifier.padding(start = 10.dp)
-                            .padding(top = 2.dp).padding(bottom = 2.dp)
-                    )
-                    Text(
-                        text = "5000 GP: $fiveThousandGemsResult", modifier = Modifier.padding(start = 10.dp)
-                            .padding(top = 2.dp).padding(bottom = 5.dp)
-                    )
-                }
-            }
-            /**
-             * Art
-             */
-            Box(
-                modifier = Modifier.weight(1f)
-                    .padding(all = 10.dp)
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(Color.LightGray)
-                    .height(height = 156.dp)
-            ) {
-                Column(verticalArrangement = Arrangement.SpaceEvenly) {
-                    /**
-                     * Art Header
-                     */
-                    Text(
-                        text = "Art:", color = Color.White,
-                        modifier = Modifier.background(Color.Black)
-                            .fillMaxWidth()
-                            .padding(start = 10.dp)
-                            .padding(top = 5.dp)
-                            .padding(bottom = 5.dp)
-                            .weight(1f)
-                    )
-                    /**
-                     * Art Content
-                     * */
-                    Text(
-                        text = "25 GP: $twentyFiveArtResult", modifier = Modifier.padding(start = 10.dp)
-                            .padding(top = 2.dp).padding(bottom = 2.dp).weight(1f)
-                    )
-                    Text(
-                        text = "250 GP: $twoFiftyArtResult", modifier = Modifier.padding(start = 10.dp)
-                            .padding(top = 2.dp).padding(bottom = 2.dp).weight(1f)
-                    )
-                    Text(
-                        text = "750 GP: $sevenFiftyArtResult", modifier = Modifier.padding(start = 10.dp)
-                            .padding(top = 2.dp).padding(bottom = 2.dp).weight(1f)
-                    )
-                    Text(
-                        text = "2500 GP: $twentyFiveHundredArtResult", modifier = Modifier.padding(start = 10.dp)
-                            .padding(top = 2.dp).padding(bottom = 2.dp).weight(1f)
-                    )
-                    Text(
-                        text = "7500 GP: $seventyFiveHundredArtResult", modifier = Modifier.padding(start = 10.dp)
-                            .padding(top = 2.dp).padding(bottom = 5.dp).weight(1f)
-                    )
-                }
-            }
-        }
-
-        /**
-         * Magical Items
+         * Magical Item Box
          */
         Box(
-            modifier = Modifier.padding(all = 10.dp)
+            modifier = Modifier
+                .padding(all = 10.dp)
                 .clip(RoundedCornerShape(5.dp))
                 .background(Color.LightGray)
         ) {
-
             Column {
                 Text(
-                    text = "Magic Items:",
+                    text = "Total Loot:",
                     color = Color.White,
-                    modifier = Modifier.background(Color.Black)
+                    modifier = Modifier
+                        .background(Color.Black)
                         .fillMaxWidth()
                         .padding(start = 10.dp)
-                        .padding(top = 5.dp)
-                        .padding(bottom = 5.dp)
+                        .padding(top = 2.dp)
+                        .padding(bottom = 2.dp)
                 )
+
+                DisplayCurrency(copperResult, silverResult, goldResult,
+                    electrumResult, platinumResult)
+
+                DisplayGems(tenGemsResult, fiftyGemsResult, oneHundredGemsResult,
+                    fiveHundredGemsResult, thousandGemsResult, fiveThousandGemsResult)
+
+                DisplayArt(twentyFiveArtResult, twoFiftyArtResult, sevenFiftyArtResult,
+                    twentyFiveHundredArtResult, seventyFiveHundredArtResult)
 
                 if (nameList.isEmpty()) {
                     Text(
                         textAlign = TextAlign.Center,
                         text = "No magic items!",
-                        modifier = Modifier.padding(10.dp).fillMaxWidth(),
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .fillMaxWidth(),
                         fontWeight = FontWeight.Bold
                     )
                 } else {
-                    LazyColumn(modifier = Modifier.weight(1f, fill = false)) {
-                        items(nameList.size) {
-                            Text(
-                                text = "${nameList[it]}",
-                                textAlign = TextAlign.Center,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 24.sp,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 10.dp)
-                            )
-                            Text(
-                                text = "${descriptionList[it]}",
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(bottom = 10.dp)
-                                    .weight(1f, fill = false)
-                            )
+                    SelectionContainer() {
+                        LazyColumn(modifier = Modifier.weight(1f, fill = false)) {
+                            items(nameList.size) {
+                                Text(
+                                    text = "${nameList[it]}",
+                                    textAlign = TextAlign.Center,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 24.sp,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 10.dp)
+                                )
+                                Text(
+                                    text = "${descriptionList[it]}",
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(bottom = 10.dp)
+                                        .weight(1f, fill = false)
+                                )
+                            }
                         }
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun DisplayCurrency (copper: Int,
+                     silver:Int,
+                     gold:Int,
+                     electrum:Int,
+                     platinum:Int) {
+
+    var currencyResult = ""
+
+    Column() {
+        Row(modifier = Modifier.padding(bottom = 5.dp)) {
+            Text(
+                text = "Currency:",
+                color = Color.Black,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 10.dp)
+                    .padding(bottom = 2.dp)
+                    .weight(1f)
+            )
+
+            if (copper != 0) {
+                currencyResult += "$copper CP, "
+            }
+
+            if (silver != 0) {
+                currencyResult += "$silver SP, "
+            }
+
+            if (electrum != 0) {
+                currencyResult += "$electrum EP, "
+            }
+
+            if (gold != 0) {
+                currencyResult += "$gold GP, "
+            }
+
+            if (platinum != 0) {
+                currencyResult += "$platinum PP, "
+            }
+
+            Text(text = currencyResult.dropLast(2),
+                modifier = Modifier.padding(end = 10.dp))
+        }
+    }
+}
+
+@Composable
+fun DisplayGems (tenGems: Int,
+                 fiftyGems: Int,
+                 oneHundredGems:Int,
+                 fiveHundredGems:Int,
+                 thousandGems:Int,
+                 fiveThousandGems:Int) {
+
+    var gemsResult = ""
+
+    Column() {
+        Row(modifier = Modifier.padding(bottom = 5.dp)) {
+            Text(
+                text = "Gems:",
+                color = Color.Black,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 10.dp)
+                    .padding(bottom = 2.dp)
+                    .weight(1f)
+            )
+
+            if (tenGems != 0) {
+                gemsResult += "${tenGems}x 10 GP gems"
+            }
+
+            if (fiftyGems != 0) {
+                gemsResult += "${fiftyGems}x 50 GP gems"
+            }
+
+            if (oneHundredGems != 0) {
+                gemsResult += "${oneHundredGems}x 100 GP gems"
+            }
+
+            if (fiveHundredGems != 0) {
+                gemsResult += "${fiveHundredGems}x 500 GP gems"
+            }
+
+            if (thousandGems != 0) {
+                gemsResult += "${thousandGems}x 1000 GP gems"
+            }
+
+            if (fiveThousandGems != 0) {
+                gemsResult += "${fiveThousandGems}x 5000 GP gems"
+            }
+
+            Text(text = gemsResult,
+                modifier = Modifier.padding(end = 10.dp))
+        }
+    }
+}
+
+@Composable
+fun DisplayArt (twentyFiveArt: Int,
+                twoFiftyArt: Int,
+                sevenFiftyArt: Int,
+                twentyFiveHundredArt: Int,
+                seventyFiveHundredArt: Int) {
+
+    var artResult = ""
+
+    Column() {
+        Row(modifier = Modifier.padding(bottom = 5.dp)) {
+            Text(
+                text = "Art:",
+                color = Color.Black,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 10.dp)
+                    .padding(bottom = 2.dp)
+                    .weight(1f)
+            )
+
+            if (twentyFiveArt != 0) {
+                artResult += "${twentyFiveArt}x 25 GP art"
+            }
+
+            if (twoFiftyArt != 0) {
+                artResult += "${twoFiftyArt}x 250 GP art"
+            }
+
+            if (sevenFiftyArt != 0) {
+                artResult += "${sevenFiftyArt}x 750 GP art"
+            }
+
+            if (twentyFiveHundredArt != 0) {
+                artResult += "${twentyFiveHundredArt}x 2500 GP art"
+            }
+
+            if (seventyFiveHundredArt != 0) {
+                artResult += "${seventyFiveHundredArt}x 7500 GP art"
+            }
+
+            Text(text = artResult,
+                modifier = Modifier.padding(end = 10.dp))
         }
     }
 }

@@ -60,6 +60,7 @@ TO DO:
 - Figure out the bug where selecting text to copy from multiple rows
 
 Updates:
+- 6/2/22 -> cleaned up table E & F. 
 - 6/1/22 -> Cleaned up magic item table C&D. Letting my mind take a breather. 
 - 5/31/22 -> Cleaned up the code to match the magic item descriptions in magic item table A & B. 
 - 5/30/22 -> Made the magic results selectable so that the user can copy and paste the results. Made composable functions to display the currency, art, and gems. Removed the row for the currency, art, gems. adjusted button sizes. Fixed package names and import names on multiple files.
